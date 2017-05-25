@@ -1138,16 +1138,19 @@ class Repository(github.GithubObject.CompletableGithubObject):
             None
         )
 
-    def get_collaborators(self):
+    def get_collaborators(self, affiliation=github.GithubObject.NotSet):
         """
         :calls: `GET /repos/:owner/:repo/collaborators <http://developer.github.com/v3/repos/collaborators>`_
         :rtype: :class:`github.PaginatedList.PaginatedList` of :class:`github.NamedUser.NamedUser`
         """
+        if affiliation is github.GithubObject.NotSet:
+            affiliation = 'all'
+
         return github.PaginatedList.PaginatedList(
             github.NamedUser.NamedUser,
             self._requester,
             self.url + "/collaborators",
-            None
+            {'affiliation': affiliation}
         )
 
     def get_comment(self, id):
